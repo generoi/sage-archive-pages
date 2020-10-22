@@ -36,7 +36,7 @@
   "extra": {
     "acorn": {
       "providers": [
-        "Genero\\Sage\\ArchivePages\\ArchivePageServiceProvider"
+        "Genero\\Sage\\ArchivePages\\ArchivePagesServiceProvider"
       ]
     }
   }

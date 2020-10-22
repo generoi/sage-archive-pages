@@ -5,7 +5,7 @@ namespace Genero\Sage\ArchivePages;
 use Roots\Acorn\ServiceProvider;
 use WP_Query;
 
-class ArchivePageServiceProvider extends ServiceProvider
+class ArchivePagesServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
