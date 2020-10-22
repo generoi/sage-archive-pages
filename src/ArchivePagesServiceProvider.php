@@ -38,7 +38,9 @@ class ArchivePagesServiceProvider extends ServiceProvider
         // By default pages are redirected to archives, but we want to keep the URL
         // structure.
         if (is_page()) {
-            if ($post_type = get_post_meta(get_queried_object_id(), '_post_type_mapped', true)) {
+            $default_language = apply_filters('wpml_default_language', null);
+            $map_post_id = apply_filters('wpml_object_id', get_queried_object_id(), 'page', true, $default_language);
+            if ($post_type = get_post_meta($map_post_id, '_post_type_mapped', true)) {
                 $query->set('mapped_post_archive', $post_type);
                 $query->is_archive = true;
                 // Do not redirect
