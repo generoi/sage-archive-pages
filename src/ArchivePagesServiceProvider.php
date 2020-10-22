@@ -38,9 +38,7 @@ class ArchivePagesServiceProvider extends ServiceProvider
         // By default pages are redirected to archives, but we want to keep the URL
         // structure.
         if (is_page()) {
-            $default_language = apply_filters('wpml_default_language', null);
-            $map_post_id = apply_filters('wpml_object_id', get_queried_object_id(), 'page', true, $default_language);
-            if ($post_type = get_post_meta($map_post_id, '_post_type_mapped', true)) {
+            if ($post_type = $this->getPostTypeFromArchivePage(get_queried_object_id())) {
                 $query->set('mapped_post_archive', $post_type);
                 $query->is_archive = true;
                 // Do not redirect
@@ -108,5 +106,13 @@ class ArchivePagesServiceProvider extends ServiceProvider
         }
         return $template;
     }
-}
 
+    protected function getPostTypeFromArchivePage(int $postId): string
+    {
+        // With WPML and Polylang, assume the page selected as the archive is
+        // the page created in the default language of the site.
+        $defaultLanguage = apply_filters('wpml_default_language', null);
+        $postId = apply_filters('wpml_object_id', $postId, 'page', true, $defaultLanguage);
+        return get_post_meta($postId, '_post_type_mapped', true) ?: '';
+    }
+}
