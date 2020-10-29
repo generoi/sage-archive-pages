@@ -2,6 +2,8 @@
 
 namespace Genero\Sage\ArchivePages;
 
+use Yoast\WP\SEO\Helpers\Options_Helper;
+
 class ArchivePages
 {
     public function getArchivePageFromPostType(string $postType): ?int
@@ -30,5 +32,18 @@ class ArchivePages
         $defaultLanguage = apply_filters('wpml_default_language', null);
         $postId = apply_filters('wpml_object_id', $postId, 'page', true, $defaultLanguage);
         return get_post_meta($postId, '_post_type_mapped', true) ?: '';
+    }
+
+    public function getArchivePageFromTaxonomy(string $taxonomy): ?int
+    {
+        if (function_exists('YoastSEO')) {
+            $yoastOptions = YoastSEO()->classes->get(Options_Helper::class);
+
+            if ($postType = $yoastOptions->get(sprintf('taxonomy-%s-ptparent', $taxonomy))) {
+                return $this->getArchivePageFromPostType($postType);
+            }
+        }
+        // @todo alternative
+        return null;
     }
 }
