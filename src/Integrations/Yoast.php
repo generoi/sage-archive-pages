@@ -22,6 +22,7 @@ class Yoast
     {
         add_filter('wpseo_breadcrumb_indexables', [$this, 'addTermBreadcrumbs']);
         add_filter('wpseo_breadcrumb_indexables', [$this, 'addBlogBreadcrumbs']);
+        add_filter('wpseo_breadcrumb_indexables', [$this, 'translateArchiveInBreadcrumbs']);
     }
 
     public function addTermBreadcrumbs(array $indexables): array
@@ -71,6 +72,25 @@ class Yoast
             array_splice($indexables, 1, 0, [$archive_indexable]);
         }
 
+        return $indexables;
+    }
+
+    public function translateArchiveInBreadcrumbs(array $indexables): array
+    {
+        $repository = YoastSEO()->classes->get(Indexable_Repository::class);
+
+        // Find all archive crumbs and translate them.
+        foreach ($indexables as $idx => $indexable) {
+            /* @var \Yoast\WP\SEO\Models\Indexable $indexable */
+            if ($indexable->get('object_type') === 'post-type-archive') {
+                $postType = $indexable->get('object_sub_type');
+
+                if ($pageId = $this->archive->getArchivePageFromPostType($postType)) {
+                    $archive_indexable = $repository->find_by_id_and_type($pageId, 'post');
+                    $indexables[$idx] = $archive_indexable;
+                }
+            }
+        }
         return $indexables;
     }
 }
