@@ -16,10 +16,11 @@ class ArchivePages
             'posts_per_page' => 1,
             'post_status' => 'publish',
             'suppress_filters' => true,
+            'lang' => '',
         ]);
 
         if (!empty($pages)) {
-            return reset($pages);
+            return $this->getTranslatedPageId(reset($pages));
         }
 
         return null;
@@ -30,7 +31,7 @@ class ArchivePages
         // With WPML and Polylang, assume the page selected as the archive is
         // the page created in the default language of the site.
         $defaultLanguage = apply_filters('wpml_default_language', null);
-        $postId = apply_filters('wpml_object_id', $postId, 'page', true, $defaultLanguage);
+        $postId = $this->getTranslatedPageId($postId, $defaultLanguage);
         return get_post_meta($postId, '_post_type_mapped', true) ?: '';
     }
 
@@ -45,5 +46,10 @@ class ArchivePages
         }
         // @todo alternative
         return null;
+    }
+
+    protected function getTranslatedPageId(int $postId, string $language = null): int
+    {
+        return apply_filters('wpml_object_id', $postId, 'page', true, $language);
     }
 }
