@@ -44,7 +44,7 @@ class Blade
         }
 
         // By default pages are redirected to archives, but we want to keep the URL
-        // structure.
+        // structure so cancel the redirect.
         if (is_page()) {
             if ($post_type = $this->archive->getPostTypeFromArchivePage(get_queried_object_id())) {
                 $query->set('mapped_post_archive', $post_type);
@@ -54,22 +54,19 @@ class Blade
             }
         }
 
-        // Redirect the archive pages to their pages.
-        if (is_post_type_archive() || is_home()) {
+        // Blog archive
+        if (is_home()) {
+            $query->set('mapped_post_archive', 'post');
+            return $query;
+        }
+
+        // Redirect archives to their corresponding pages.
+        if (is_post_type_archive()) {
             $archivePage = $this->archive->getArchivePageFromPostType(
                 get_queried_object()->name
             );
-            if (!$archivePage) {
-                return $query;
-            }
-
-            if (is_home()) {
-                $query->set('mapped_post_archive', 'post');
-                return $query;
-            }
-
-            if (!empty($pages)) {
-                wp_safe_redirect(get_permalink(reset($pages)));
+            if ($archivePage) {
+                wp_safe_redirect(get_permalink($archivePage));
                 exit;
             }
         }

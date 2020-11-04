@@ -24,7 +24,7 @@ class Yoast
         add_filter('wpseo_breadcrumb_indexables', [$this, 'addBlogBreadcrumbs']);
     }
 
-    public function addTermBreadcrumbs(array $indexables)
+    public function addTermBreadcrumbs(array $indexables): array
     {
         if (get_query_var('original_archive_type') !== 'term') {
            return $indexables;
@@ -56,7 +56,7 @@ class Yoast
         return $indexables;
     }
 
-    public function addBlogBreadcrumbs(array $indexables)
+    public function addBlogBreadcrumbs(array $indexables): array
     {
         // Prepend the Blog page on posts and categories.
         if (!is_singular('post') && !is_category()) {
