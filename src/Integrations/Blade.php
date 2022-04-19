@@ -45,7 +45,7 @@ class Blade
 
         // By default pages are redirected to archives, but we want to keep the URL
         // structure so cancel the redirect.
-        if (is_page()) {
+        if (is_page() && get_queried_object_id()) {
             if ($post_type = $this->archive->getPostTypeFromArchivePage(get_queried_object_id())) {
                 $query->set('mapped_post_archive', $post_type);
                 $query->is_archive = true;
