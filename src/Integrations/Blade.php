@@ -8,6 +8,8 @@ use WP_Query;
 
 class Blade
 {
+    protected ArchivePages $archive;
+
     public function __construct(ArchivePages $archive)
     {
         $this->archive = $archive;
