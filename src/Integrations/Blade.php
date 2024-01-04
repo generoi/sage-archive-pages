@@ -64,12 +64,13 @@ class Blade
 
         // Redirect archives to their corresponding pages.
         if (is_post_type_archive()) {
-            $archivePage = $this->archive->getArchivePageFromPostType(
-                get_queried_object()->name
-            );
-            if ($archivePage) {
-                wp_safe_redirect(get_permalink($archivePage));
-                exit;
+            $postType = get_queried_object()->name ?? $query->get('post_type');
+            if ($postType) {
+                $archivePage = $this->archive->getArchivePageFromPostType($postType);
+                if ($archivePage) {
+                    wp_safe_redirect(get_permalink($archivePage));
+                    exit;
+                }
             }
         }
 
