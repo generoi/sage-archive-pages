@@ -4,7 +4,7 @@ namespace Genero\Sage\ArchivePages;
 
 use Genero\Sage\ArchivePages\Integrations\Blade;
 use Genero\Sage\ArchivePages\Integrations\Yoast;
-use Roots\Acorn\ServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
 class ArchivePagesServiceProvider extends ServiceProvider
 {
