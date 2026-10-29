@@ -48,7 +48,7 @@ class ArchivePages
         return null;
     }
 
-    protected function getTranslatedPageId(int $postId, string $language = null): int
+    protected function getTranslatedPageId(int $postId, ?string $language = null): int
     {
         return apply_filters('wpml_object_id', $postId, 'page', true, $language);
     }
